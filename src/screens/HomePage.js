@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  Text
 } from 'react-native';
 
-import Input from '../common/input.js';
+import Input from '../common/Input';
+import Button from "../common/Button";
 
 const HomePage = () => {
 const [name, setName] = useState('')
+const [password, setPassword] = useState('')
 
   return (
     <View style={styles.container}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={setName}
-          value={name}
-        />
-        <Input onPress={()=>{}} value={name} label={'Login'}/>
+      <View style={styles.inputContainer}>
+        <Input onChange={setName} value={name} label={'Login'} isValid={name}/>
+        <Input onChange={setPassword} value={password} label={'password'} isPassword isValid={password}/>
+      </View>
+  <Button onChange={()=>{}} label={'Sign in'} containerStyle={{marginTop: 10}}/>
     </View>
   );
 };
@@ -29,6 +30,12 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  inputContainer: {
+    width: '100%',
+    height: '20%',
+    justifyContent: 'space-between',
   },
   inputStyle: {
     height: 40,
