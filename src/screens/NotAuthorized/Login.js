@@ -2,45 +2,45 @@ import React, { useState } from 'react';
 import {
     View,
     StyleSheet,
-    ScrollView
 } from 'react-native';
 
 import { Input, Button, Container } from '../../common';
+import authAPI from '../../services/api/auth';
 
-const Login = () => {
+const Login = ({navigation}) => {
     const [name, setName] = useState('')
+    const [isValidName, setIsValidName] = useState(false)
+
     const [password, setPassword] = useState('')
+    const [isValidPassword, setIsValidPassword] = useState(false)
+
     const login = () => {
-        async function postData(url = '',) {
-            const response = await fetch(url = '',data = {}, {
-                method: 'POST',
-                mode: 'cors',
-                cache: 'no-cache',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                redirect: 'follow',
-                referrerPolicy: 'no-referrer',
-                body: JSON.stringify(data)
-            });
-            return response;
-        }
-        let data = {
-            email: name,
-            password: password
-        }
-        postData('https://us-central1-zxsvm-zxsvm.cloudfunctions.net/api/v1/session/login', data)
-            .then(data => {
-                console.log(data);
-            }).catch((err)=>console.log('err', err));
+        authAPI.login('',{userName: name, password}).then(()=>{
+            console.log('Test')
+            navigation.goBack()
+        }).catch((err) => {
+            setIsValidName(false)
+            setIsValidPassword(false)
+            console.log(err)
+        })
     }
+
+    const onNameChange = (text) => {
+        setName(text)
+        setIsValidName(!!text)
+    }
+
+    const onPasswordChange = (text) => {
+        setPassword(text)
+        setIsValidPassword(!!text)
+    }
+
     return (
         <Container containerStyles={styles.container}>
             {/*<View style={styles.big}/>*/}
             <View style={styles.inputContainer}>
-                <Input onChange={setName} value={name} label={'Login'} isValid={name}/>
-                <Input onChange={setPassword} value={password} label={'password'} isPassword isValid={password}/>
+                <Input onChange={onNameChange} value={name} label={'Login'} isValid={name && isValidName}/>
+                <Input onChange={onPasswordChange} value={password} label={'password'} isPassword isValid={password && isValidPassword}/>
             </View>
             <Button onChange={login} label={'Sign in'} containerStyle={{marginTop: 10}} disabled={!(name && password)}/>
 
