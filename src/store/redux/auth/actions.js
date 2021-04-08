@@ -1,9 +1,9 @@
-import { authActionsTypes } from './types';
+import { types } from './types';
 
 
-export const configurationActions = Object.freeze({
+export const authActions = Object.freeze({
     signInRequest: (payload) => ({
-        type: authActionsTypes.LOG_IN_REQUEST,
+        type: types.LOG_IN_REQUEST,
         payload,
     }),
 });

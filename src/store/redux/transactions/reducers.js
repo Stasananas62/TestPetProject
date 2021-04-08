@@ -1,16 +1,15 @@
 import { types } from './types';
 
 export const initial = {
-    authorized: false
+    transactionsList: {}
 };
 
 export default (state = initial, action) => {
     switch (action.type) {
-        case types.LOG_IN_REQUEST: {
-            console.log('test')
+        case types.ADD_TRANSACTION: {
             return {
                 ...state,
-                authorized: false,
+                transactionsList: {...state.transactions, [action.payload?.date]: action.payload},
             };
         }
         default:

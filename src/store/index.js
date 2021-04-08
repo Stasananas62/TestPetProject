@@ -1,3 +1,13 @@
-import { createStore } from 'redux'
+import {createStore, combineReducers} from "redux";
 
-export let store = createStore(counterReducer)
+import reducers from './redux';
+
+const {
+    transactionsReducer
+} = reducers;
+
+const rootReducer = combineReducers({
+    transactions: transactionsReducer,
+});
+
+export const store = createStore(rootReducer)
