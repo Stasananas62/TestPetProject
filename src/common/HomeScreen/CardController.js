@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
     View,
     StyleSheet,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from 'react-native';
-import {cardTypes} from "../../core/constants";
+
+import {cardTypes} from '../../core/constants';
+import CategoryItem from './CategoryItem';
+import { useNavigation } from '@react-navigation/native';
 
 const CardController = ({ config, onChangeConfig }) => {
+    const navigation = useNavigation();
+
+    const onCategoryPress = useCallback((selectedCategory) => {
+        navigation.navigate('CategoryDetail', { selectedCategory })
+    }, [config.type, navigation])
+
+    const CardContent = useMemo(()=>{
+        switch (config.type){
+            case cardTypes.categories:
+                return <>{config?.data?.map((item)=> <CategoryItem key={item.category} item={item} onPress={onCategoryPress} />)}</>
+            case cardTypes.dashBoard:
+                break
+            case cardTypes.filters:
+                return null
+        }
+    }, [config.type])
 
     return (
         <View style={styles.cardContainer}>
@@ -28,9 +48,14 @@ const CardController = ({ config, onChangeConfig }) => {
                     <Text style={styles.text}>Фільтри</Text>
                 </TouchableOpacity>
             </View>
-            {console.log(config.backgroundColor)}
             <View style={[styles.actionsContainer, {backgroundColor: config.backgroundColor}]}>
-                <Text>Future content</Text>
+                {CardContent}
+                <Image
+                    style={{width: 50, height: 50}}
+                    source={{
+                        uri: `http://openweathermap.org/img/w/${"04d"}.png`,
+                    }}
+                />
             </View>
         </View>
     );
@@ -40,11 +65,12 @@ const styles = StyleSheet.create({
     actionsContainer: {
         width: '100%',
         height: '93%',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'space-between',
         paddingHorizontal: 16,
         backgroundColor: '#fff',
         bottom: 0,
+        flexDirection: 'row',
+        paddingTop: 16,
     },
     fileButton: {
         width: '33.3333%',
@@ -68,4 +94,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CardController;
+export default React.memo(CardController);
